@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model business {
+  id                Int              @id @default(autoincrement())
+  name              String           @db.VarChar(255)
+  tagline           String?          @db.VarChar(255)
+  about             String?
+  address           String?
+  map_url           String?
+  profile_image_url String?
+  video_url         String?
+  whatsapp_number   String?          @db.VarChar(20)
+  is_active         Boolean          @default(true)
+  created_at        DateTime         @default(now()) @db.Timestamp(6)
+  updated_at        DateTime         @default(now()) @db.Timestamp(6)
+  contacts          contacts[]
+  gallery_images    gallery_images[]
+  links             links[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model contacts {
+  id            Int      @id @default(autoincrement())
+  business_id   Int
+  label         String   @db.VarChar(100)
+  value         String   @db.VarChar(255)
+  contact_type  String   @db.VarChar(10)
+  display_order Int      @default(0)
+  is_active     Boolean  @default(true)
+  business      business @relation(fields: [business_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([business_id, display_order], map: "idx_contacts_business")
+}
+
+model gallery_images {
+  id            Int      @id @default(autoincrement())
+  business_id   Int
+  image_url     String
+  caption       String?  @db.VarChar(255)
+  display_order Int      @default(0)
+  is_active     Boolean  @default(true)
+  business      business @relation(fields: [business_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([business_id, display_order], map: "idx_gallery_business")
+}
+
+model inquiries {
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(255)
+  mobile       String   @db.VarChar(15)
+  message      String
+  submitted_at DateTime @default(now()) @db.Timestamptz(6)
+  ip_address   String?  @db.VarChar(45)
+
+  @@index([submitted_at(sort: Desc)], map: "idx_inquiries_submitted")
+}
+
+model links {
+  id            Int      @id @default(autoincrement())
+  business_id   Int
+  platform      String   @db.VarChar(50)
+  url           String
+  display_order Int      @default(0)
+  is_active     Boolean  @default(true)
+  business      business @relation(fields: [business_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([business_id, display_order], map: "idx_links_business")
+}

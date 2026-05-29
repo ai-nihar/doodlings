@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --color-rexon-navy: #1a2d4f;
+  --color-rexon-navy-dark: #111e35;
+  --color-rexon-blue: #0085d4;
+  --color-rexon-blue-dark: #0070b8;
+  --color-rexon-blue-light: #e8f4fc;
+  --font-sans: var(--font-outfit), sans-serif;
+}
+
+body {
+  font-family: var(--font-outfit), "Segoe UI", sans-serif;
+  background-color: #f4f7fa;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Subtle light background pattern — keeps it from feeling flat */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(
+      ellipse at 10% 10%,
+      rgba(0, 133, 212, 0.07) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 90% 90%,
+      rgba(26, 45, 79, 0.05) 0%,
+      transparent 50%
+    ),
+    linear-gradient(180deg, #eef4f9 0%, #f4f7fa 100%);
+  pointer-events: none;
+}
